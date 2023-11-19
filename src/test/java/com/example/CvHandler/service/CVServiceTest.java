@@ -28,22 +28,22 @@ public class CVServiceTest {
     @Test
     public void testSaveCV() {
         CV cv = new CV();
-        cv.setId(1L);
+        cv.setCv_id(1L);
         when(cvRepository.save(cv)).thenReturn(cv);
 
         CV savedCV = cvService.saveCV(cv);
-        assertEquals(1L, savedCV.getId());
+        assertEquals(1L, savedCV.getCv_id());
     }
 
     @Test
     public void testGetCVById() {
         Long cvId = 1L;
         CV cv = new CV();
-        cv.setId(cvId);
+        cv.setCv_id(cvId);
         when(cvRepository.findById(cvId)).thenReturn(Optional.of(cv));
 
         Optional<CV> foundCV = cvService.getCVById(cvId);
-        assertEquals(cvId, foundCV.get().getId());
+        assertEquals(cvId, foundCV.get().getCv_id());
     }
 
     @Test

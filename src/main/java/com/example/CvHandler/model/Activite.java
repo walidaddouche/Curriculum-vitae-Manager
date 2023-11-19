@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,14 @@ public class Activite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int annee;
+    private int year;
     private String nature;
-    private String titre;
-    private String texteDescriptif;
+    private String title;
+    private String description;
     private String adresseWeb;
+    @OneToOne()
+    private CV cv;
+
 
 }
 
