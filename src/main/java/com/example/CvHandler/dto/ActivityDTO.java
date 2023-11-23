@@ -1,4 +1,4 @@
 package com.example.CvHandler.dto;
 
-public class ActiviteDTO {
+public class ActivityDTO {
 }

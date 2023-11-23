@@ -2,6 +2,7 @@ package com.example.CvHandler.service;
 
 import com.example.CvHandler.model.Candidat;
 import com.example.CvHandler.repository.CandidatRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,19 +26,46 @@ public class CandidatServiceTest {
 
     @Test
     public void testSaveCandidat() {
-        Candidat candidat = new Candidat();
-        candidat.setId(1L);
+        Candidat candidat = Candidat.builder().id(1L).build();
         when(candidatRepository.save(candidat)).thenReturn(candidat);
 
         Candidat savedCandidat = candidatService.saveCandidat(candidat);
         assertEquals(1L, savedCandidat.getId());
+        assertEquals(candidat, savedCandidat);
+
+    }
+
+    @Test
+    public void testUpdateCandidat() {
+        Candidat existingCandidat = Candidat.builder()
+                .id(1L)
+                .nom("AncienNom")
+                .prenom("AncienPrenom").email("mail@gmail.com")
+                .build();
+
+
+        Candidat updatedCandidat = Candidat.builder()
+                .nom("NouveauNom")
+                .prenom("NouveauPrenom")
+                .build();
+
+        // Configurez le repository mock pour retourner le candidat existant lorsqu'il est recherché par ID
+        when(candidatRepository.findById(1L)).thenReturn(Optional.of(existingCandidat));
+
+        // Appelez la méthode updateCandidat pour mettre à jour le candidat existant
+        candidatService.updateCandidatAttributes(1L, updatedCandidat);
+
+        // Vérifiez que la méthode save du repository a été appelée avec le candidat mis à jour
+        Mockito.verify(candidatRepository).save(existingCandidat);
+
+        assertEquals("NouveauNom", existingCandidat.getNom());
+        assertEquals("NouveauPrenom", existingCandidat.getPrenom());
     }
 
     @Test
     public void testGetCandidatById() {
         Long candidatId = 1L;
-        Candidat candidat = new Candidat();
-        candidat.setId(candidatId);
+        Candidat candidat = Candidat.builder().id(candidatId).build();
         when(candidatRepository.findById(candidatId)).thenReturn(Optional.of(candidat));
 
         Optional<Candidat> foundCandidat = candidatService.getCandidatById(candidatId);
@@ -47,8 +75,8 @@ public class CandidatServiceTest {
     @Test
     public void testGetAllCandidats() {
         List<Candidat> candidats = new ArrayList<>();
-        candidats.add(new Candidat());
-        candidats.add(new Candidat());
+        candidats.add(Candidat.builder().build());
+        candidats.add(Candidat.builder().build());
         when(candidatRepository.findAll()).thenReturn(candidats);
 
         Iterable<Candidat> allCandidats = candidatService.getAllCandidats();

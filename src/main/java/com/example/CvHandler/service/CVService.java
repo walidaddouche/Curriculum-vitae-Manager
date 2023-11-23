@@ -1,36 +1,36 @@
 package com.example.CvHandler.service;
 
+import com.example.CvHandler.model.CurriculumVitae;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.CvHandler.model.CV;
-import com.example.CvHandler.repository.CvRepository;
+import com.example.CvHandler.repository.CurriculumVitaeRepository;
 
 import java.util.Optional;
 
 @Service
 public class CVService {
 
-    private final CvRepository cvRepository;
+    private final CurriculumVitaeRepository curriculumVitaeRepository;
 
     @Autowired
-    public CVService(CvRepository cvRepository) {
-        this.cvRepository = cvRepository;
+    public CVService(CurriculumVitaeRepository curriculumVitaeRepository) {
+        this.curriculumVitaeRepository = curriculumVitaeRepository;
     }
 
-    public CV saveCV(CV cv) {
-        return cvRepository.save(cv);
+    public CurriculumVitae saveCV(CurriculumVitae cv) {
+        return curriculumVitaeRepository.save(cv);
     }
 
-    public Optional<CV> getCVById(Long id) {
-        return cvRepository.findById(id);
+    public Optional<CurriculumVitae> getCVById(Long id) {
+        return curriculumVitaeRepository.findById(id);
     }
 
-    public Iterable<CV> getAllCVs() {
-        return cvRepository.findAll();
+    public Iterable<CurriculumVitae> getAllCVs() {
+        return curriculumVitaeRepository.findAll();
     }
 
     public void deleteCV(Long id) {
-        cvRepository.deleteById(id);
+        curriculumVitaeRepository.deleteById(id);
     }
 
 }
