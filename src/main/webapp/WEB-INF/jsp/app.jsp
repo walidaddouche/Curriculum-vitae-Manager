@@ -1,17 +1,20 @@
-<%@ include file="headers.jsp" %>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-<c:url var="home" value="/aaa"/>
-<c:url var="app" value="/candidat.js"/>
+<c:url var="app" value="/app.js" />
+
 
 <div id="myApp">
-
     <div class="container">
-        <h1>My application</h1>
-        <p>{{ message }}</p>
-        <p>list = <span v-for="element in list">{{element}} - </span></p>
-        <p>counter = {{counter}}</p>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/candidatDetail">CandidatDetail 1</a>
+        </nav>
+
+        <component :is="currentView" />
+
     </div>
 </div>
+<script src="${app}" type="module"></script>
 
-<script src="${app}"></script>
 
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>

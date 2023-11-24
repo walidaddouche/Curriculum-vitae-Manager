@@ -1,0 +1,32 @@
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    .navbar {
+        background-color: #3498db; /* Change this to your desired background color */
+        color: #fff;
+        padding: 10px;
+    }
+
+    .navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+        transition: color 0.3s; /* Add a smooth color transition */
+    }
+
+    .navbar a:hover {
+        color: #ff5733; /* Change this to the desired hover color */
+    }

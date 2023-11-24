@@ -10,11 +10,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class index {
 
 
-    @RequestMapping("/app")
-    public  String  app(){
-        return "app";
-
+    @RequestMapping("/")
+    public ModelAndView app() {
+        return new ModelAndView("app");
     }
 
-
+    @RequestMapping(value = "/{path:[^\\.]*}")
+    public String forward() {
+        return "app";
+    }
 }
+
+
+
