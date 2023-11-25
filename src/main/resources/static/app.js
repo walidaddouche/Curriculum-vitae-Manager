@@ -1,27 +1,32 @@
 import CandidatDetail from './candidatDetail.js';
 import NotFound from './notFound.js';
 import Candidats from "./candidats.js";
+
 const routes = {
     '/': Candidats,
-    '/candidatDetail': CandidatDetail ,
+    '/candidatDetail/:id': CandidatDetail,
 };
 
 const app = Vue.createApp({
     data() {
         return {
-            currentPath: window.location.pathname
+            currentPath: window.location.hash,
         };
+    },
+    created() {
+        window.addEventListener('hashchange', () => {
+            this.currentPath = window.location.hash;
+        });
     },
     computed: {
         currentView() {
-            return routes[this.currentPath] || NotFound;
-        }
+            if (this.currentPath.startsWith('#/candidatDetail/')) {
+                return CandidatDetail;
+            }
+            return routes[this.currentPath.slice(2) || '/'] || NotFound;
+        },
     },
-    mounted() {
-        window.addEventListener('popstate', () => {
-            this.currentPath = window.location.pathname;
-        });
-    }
 });
-app.use(routes)
+
+app.use(routes);
 app.mount('#myApp');

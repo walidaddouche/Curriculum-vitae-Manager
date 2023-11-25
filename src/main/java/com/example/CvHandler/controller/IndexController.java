@@ -15,11 +15,6 @@ public class IndexController {
         return new ModelAndView("app");
     }
 
-    @RequestMapping(value = "/{path:[^\\.]*}")
-    public String forward() {
-        return "app";
-    }
-
 }
 
 
