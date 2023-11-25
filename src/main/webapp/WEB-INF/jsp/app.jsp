@@ -7,10 +7,10 @@
     <div class="container">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/candidatDetail">CandidatDetail 1</a>
+            <a class="navbar-brand" href="/candidatDetail">CandidatDetail </a>
         </nav>
 
-        <component :is="currentView" />
+        <component :is="currentView"></component>
 
     </div>
 </div>

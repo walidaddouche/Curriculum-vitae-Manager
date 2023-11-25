@@ -1,10 +1,9 @@
 import CandidatDetail from './candidatDetail.js';
 import NotFound from './notFound.js';
 import Candidats from "./candidats.js";
-
 const routes = {
     '/': Candidats,
-    '/candidatDetail': CandidatDetail
+    '/candidatDetail': CandidatDetail ,
 };
 
 const app = Vue.createApp({
@@ -15,8 +14,6 @@ const app = Vue.createApp({
     },
     computed: {
         currentView() {
-            console.log("PATH" + window.location.pathname )
-
             return routes[this.currentPath] || NotFound;
         }
     },
@@ -26,5 +23,5 @@ const app = Vue.createApp({
         });
     }
 });
-
+app.use(routes)
 app.mount('#myApp');

@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class index {
+public class IndexController {
 
 
     @RequestMapping("/")
@@ -19,7 +19,7 @@ public class index {
     public String forward() {
         return "app";
     }
-}
 
+}
 
 
