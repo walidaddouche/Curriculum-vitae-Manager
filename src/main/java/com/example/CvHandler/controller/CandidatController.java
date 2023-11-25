@@ -6,6 +6,9 @@ import com.example.CvHandler.model.Candidat;
 import com.example.CvHandler.service.CandidatService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,12 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/candidat")
@@ -44,14 +47,34 @@ public class CandidatController {
     }
 
     @GetMapping("/candidats")
-    public ResponseEntity<?> getAllCandidats() {
-        Iterable<Candidat> candidats = candidatService.getAllCandidats();
-        List<CandidatDTO> dtos = new ArrayList<>();
-        for (Candidat candidat : candidats) {
-            CandidatDTO candidatDTO = modelMapper.map(candidat, CandidatDTO.class);
-            dtos.add(candidatDTO);
+    public ResponseEntity<?> getCandidats(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(name = "withDetails", defaultValue = "false") boolean withDetails) {
+        Pageable pageable = PageRequest.of(page, size);
+        Object response =  null;
+
+        if (withDetails) {
+            Iterable<Candidat> candidats = candidatService.getAllCandidats(pageable);
+
+            List<CandidatDTO> dtos = new ArrayList<>();
+            for (Candidat candidat : candidats) {
+                CandidatDTO candidatDTO = modelMapper.map(candidat, CandidatDTO.class);
+                dtos.add(candidatDTO);
+
+            }
+            response = dtos;
+        } else {
+            response = candidatService.getAllCandidatWithoutDetails(pageable);
         }
-        return ResponseEntity.ok(dtos);
+        int totalPages = (int) Math.ceil(candidatService.countAllCandidats() / (double) size);
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("X-Total-Elements", size.toString());
+
+        headers.add("X-Total-Pages", Integer.toString(totalPages));
+        return ResponseEntity.ok().headers(headers).body(response);
+
     }
 
 

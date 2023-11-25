@@ -1,10 +1,16 @@
 package com.example.CvHandler.service;
 
 
+import com.example.CvHandler.summary.CandidatProjection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.CvHandler.model.Candidat;
 import com.example.CvHandler.repository.CandidatRepository;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +35,12 @@ public class CandidatService {
 
     public Iterable<Candidat> getAllCandidats() {
         return candidatRepository.findAll();
+
+    }
+
+    public Iterable<Candidat> getAllCandidats(Pageable pageable) {
+        return candidatRepository.findAll(pageable);
+
     }
 
     public void deleteCandidat(Long id) {
@@ -45,4 +57,18 @@ public class CandidatService {
 
         return null; // Gérer le cas où le candidat n'est pas trouvé
     }
+
+
+    public List<CandidatProjection> getAllCandidatWithoutDetails(Pageable pageable) {
+
+        return candidatRepository.getAllCandidatWithoutDetails(pageable).toList();
+
+    }
+    public long countAllCandidats() {
+        return candidatRepository.count();
+    }
+
+
+
+
 }

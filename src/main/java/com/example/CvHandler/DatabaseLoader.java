@@ -2,6 +2,7 @@ package com.example.CvHandler;
 
 import com.example.CvHandler.model.Candidat;
 import com.example.CvHandler.repository.CandidatRepository;
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -20,11 +21,27 @@ public class DatabaseLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args)  {
-        // Insérez des données ici
-        Candidat candidat1 = Candidat.builder().nom("ALVAREZ").prenom("RAYAN").email("Rayan@Mail.com").build();
-        Candidat candidat2 = Candidat.builder().nom("THOMAS").prenom("BROL").email("Thomas@Mail.com").dateNaissance(new Date("17/01/2001")).build();
 
-        candidatRepository.save(candidat1);
-        candidatRepository.save(candidat2);
+        String nom,prenom,email;
+        Date dateNaissance;
+
+        Faker faker = new Faker();
+        for (int i = 1; i <= 100; i++) {
+             nom = faker.name().lastName();
+             prenom = faker.name().firstName();
+             email = faker.internet().emailAddress();
+             dateNaissance = faker.date().birthday();
+
+
+            candidatRepository.save(
+                                    Candidat.builder()
+                                        .nom(nom)
+                                        .prenom(prenom)
+                                        .email(email)
+                                        .dateNaissance(dateNaissance)
+                                        .build()
+                                    );
+        }
     }
-}
+    }
+
