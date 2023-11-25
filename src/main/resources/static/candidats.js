@@ -40,6 +40,12 @@ export default {
         changePageSize(size) {
             this.pageSize = size;
             this.fetchCandidats();
+        },
+        getPageRange() {
+            const rangeStart = Math.max(1, this.currentPage - 5);
+            const rangeEnd = Math.min(this.totalPages, rangeStart + 10);
+
+            return Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => rangeStart + i);
         }
     },
 
@@ -73,7 +79,7 @@ export default {
             <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
               <a class="page-link" href="#" @click="changePage(currentPage - 1)">Previous</a>
             </li>
-            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ 'active': currentPage === page }">
+            <li v-for="page in getPageRange()" :key="page" :class="{ 'active': currentPage === page }">
               <a class="page-link" href="#" @click="changePage(page)">{{ page }}</a>
             </li>
             <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
@@ -81,8 +87,8 @@ export default {
             </li>
           </ul>
         </nav>
-        
       </div>
+      
       
     `
 };

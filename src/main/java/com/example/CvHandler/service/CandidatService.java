@@ -3,8 +3,6 @@ package com.example.CvHandler.service;
 
 import com.example.CvHandler.summary.CandidatProjection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.CvHandler.model.Candidat;
@@ -66,6 +64,22 @@ public class CandidatService {
     }
     public long countAllCandidats() {
         return candidatRepository.count();
+    }
+
+
+    public List<Candidat> searchByNom(String nom) {
+        // Implémentez la logique de recherche par nom
+        return candidatRepository.findByNomContainingIgnoreCase(nom);
+    }
+
+    public List<Candidat> searchByPrenom(String prenom) {
+        // Implémentez la logique de recherche par prénom
+        return candidatRepository.findByPrenomContainingIgnoreCase(prenom);
+    }
+
+    public List<Candidat> searchByNomAndPrenom(String nom, String prenom) {
+        // Implémentez la logique de recherche par nom et prénom
+        return candidatRepository.findByNomContainingAndPrenomContainingIgnoreCase(nom, prenom);
     }
 
 

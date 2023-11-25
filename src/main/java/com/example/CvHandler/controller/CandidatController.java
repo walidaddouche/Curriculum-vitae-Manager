@@ -97,6 +97,34 @@ public class CandidatController {
     }
 
 
+    @GetMapping("/search/nom")
+    public ResponseEntity<?> searchByNom(@RequestParam(name = "query") String query) {
+        if (query.length() < 3) {
+            return ResponseEntity.badRequest().body("Le terme de recherche doit avoir au moins trois lettres.");
+        }
+        List<Candidat> candidats = candidatService.searchByNom(query);
+        return ResponseEntity.ok(candidats);
+    }
+
+    @GetMapping("/search/prenom")
+    public ResponseEntity<?> searchByPrenom(@RequestParam(name = "query") String query) {
+        if (query.length() < 3) {
+            return ResponseEntity.badRequest().body("Le terme de recherche doit avoir au moins trois lettres.");
+        }
+        List<Candidat> candidats = candidatService.searchByPrenom(query);
+        return ResponseEntity.ok(candidats);
+    }
+
+    // Vous pouvez également ajouter une méthode pour rechercher par les deux (nom et prénom) si nécessaire
+    @GetMapping("/search/both")
+    public ResponseEntity<?> searchByNomAndPrenom(
+            @RequestParam(name = "nom") String nom,
+            @RequestParam(name = "prenom") String prenom) {
+        List<Candidat> candidats = candidatService.searchByNomAndPrenom(nom, prenom);
+        return ResponseEntity.ok(candidats);
+    }
+
+
 
 
 
