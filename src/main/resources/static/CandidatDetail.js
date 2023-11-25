@@ -76,23 +76,23 @@ export default {
 
     template: `
       <div>
-        <h1> CandidatDetail </h1>
-        <template v-if="candidate">
-          <p>Nom : {{ nom }}</p>
-          <p>Prénom : {{ prenom }}</p>
-          <p>Email : {{ email }}</p>
-          <p>Siteweb : {{ siteweb }}</p>
-          <p>Date de Naissance : {{ dateDeNaissance }}</p>
-        </template>
+      <h1 class="mb-4">CandidatDetail</h1>
+      <template v-if="candidate">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Nom :</strong> {{ nom }}</li>
+          <li class="list-group-item"><strong>Prénom :</strong> {{ prenom }}</li>
+          <li class="list-group-item"><strong>Email :</strong> {{ email }}</li>
+          <li class="list-group-item"><strong>Siteweb :</strong> {{ siteweb }}</li>
+          <li class="list-group-item"><strong>Date de Naissance :</strong> {{ dateDeNaissance }}</li>
+        </ul>
+      </template>
 
-        <template v-else>
-          <p v-if="error">
-            L'identifiant  du candidat est invalide
-          </p>
-          <p v-else>
-            Une erreur s'est produite lors de la récupération des données du candidat
-          </p>
-        </template>
+      <template v-else>
+        <div class="alert alert-danger mt-4" role="alert">
+          <p v-if="error">L'identifiant du candidat est invalide</p>
+          <p v-else>Une erreur s'est produite lors de la récupération des données du candidat</p>
+        </div>
+      </template>
       </div>
     `,
 };

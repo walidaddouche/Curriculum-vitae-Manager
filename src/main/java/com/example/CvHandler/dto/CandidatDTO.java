@@ -11,6 +11,8 @@ import java.util.Date;
 @Data
 
 public class CandidatDTO {
+    private Long id;
+
     private String nom;
     private String prenom;
     private String email;
