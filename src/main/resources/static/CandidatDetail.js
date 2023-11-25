@@ -15,20 +15,24 @@ export default {
 
     methods: {
         onRouteChange() {
-            // Log du changement de chemin à la console
-
             // Le reste du code pour extraire l'ID et appeler l'API reste inchangé
             const hash = window.location.hash;
             const regex = /#\/candidatDetail\/(\d+)/;
             const match = hash.match(regex);
             const candidatId = match ? match[1] : null;
 
-            this.candidateId = candidatId;
-
-            if (!this.candidateId || isNaN(this.candidateId)) {
+            if (!candidatId || isNaN(candidatId)) {
                 this.error = 'L\'ID du candidat est invalide';
                 return;
             }
+
+            // Vérifiez si l'ID a changé avant d'appeler l'API
+            if (candidatId === this.candidateId) {
+                return;
+            }
+
+            this.candidateId = candidatId;
+            this.error = null;
 
             this.axios.get(`/candidat/${this.candidateId}`)
                 .then(response => {
@@ -45,6 +49,7 @@ export default {
         },
 
         onWindowHashChange() {
+            this.onRouteChange();
             // Log du changement de hash de la fenêtre à la console
             console.log(`Changement de hash de la fenêtre vers "${window.location.hash}"`);
         }
@@ -65,7 +70,9 @@ export default {
     },
 
     // Assurez-vous de supprimer l'écouteur d'événements lors de la destruction du composant
-
+    beforeDestroy() {
+        window.removeEventListener('hashchange', this.onWindowHashChange);
+    },
 
     template: `
       <div>
