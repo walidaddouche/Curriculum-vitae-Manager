@@ -6,6 +6,7 @@ export default {
             searchResults: [],
             axios: null,
             error: null,
+            searched : false
         };
     },
     mounted() {
@@ -24,6 +25,7 @@ export default {
                     .get(`/candidat/search/${this.searchType}?query=${this.searchQuery}`)
                     .then((response) => {
                         this.searchResults = response.data;
+                        this.searched = true;
                     })
                     .catch((error) => {
                         this.error =
@@ -31,6 +33,7 @@ export default {
                     });
             }
         },
+
     },
     template :
     `<div class="container mt-4">
@@ -62,7 +65,7 @@ export default {
         </ul>
       </div>
       <div v-else class="mt-4">
-        <p class="alert alert-warning">Aucun résultat trouvé.</p>
+        <p v-if="searched" class="alert alert-warning">Aucun résultat trouvé.</p>
       </div>
     </div>
     `

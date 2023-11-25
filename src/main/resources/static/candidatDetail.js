@@ -84,6 +84,8 @@ export default {
           <li class="list-group-item"><strong>Email :</strong> {{ email }}</li>
           <li class="list-group-item"><strong>Siteweb :</strong> {{ siteweb }}</li>
           <li class="list-group-item"><strong>Date de Naissance :</strong> {{ dateDeNaissance }}</li>
+          <li class="list-group-item"><strong>CV </strong> {{ }}</li>
+
         </ul>
       </template>
 

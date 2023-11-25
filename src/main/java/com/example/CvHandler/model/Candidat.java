@@ -1,5 +1,6 @@
 package com.example.CvHandler.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +30,7 @@ public class Candidat {
     private String siteWeb;
     private Date dateNaissance;
     private String motDePasse;
-    @OneToOne()
+    @OneToOne(mappedBy = "candidat", cascade = CascadeType.ALL)
     private CurriculumVitae cv;
 
 

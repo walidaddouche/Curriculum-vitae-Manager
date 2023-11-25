@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
 
@@ -21,6 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Slf4j
 public class CurriculumVitae {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +32,18 @@ public class CurriculumVitae {
     @JoinColumn(name = "candidat_id")
     private Candidat candidat;
 
+
     @OneToMany(mappedBy = "cv", cascade = CascadeType.ALL)
     private Set<Activity> activities;
+
+
+    public void setCandidat(Candidat candidat) {
+        log.warn("SET CANDIDAT ON CV ENTITY");
+
+        this.candidat = candidat;
+        if (candidat != null && !candidat.getCv().equals(this)) {
+            candidat.setCv(this);
+        }
+    }
 
 }
