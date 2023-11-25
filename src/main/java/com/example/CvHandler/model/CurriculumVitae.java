@@ -28,22 +28,14 @@ public class CurriculumVitae {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "candidat_id")
+    @OneToOne(cascade = CascadeType.ALL)
     private Candidat candidat;
 
 
-    @OneToMany(mappedBy = "cv", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cv", cascade = CascadeType.PERSIST)
     private Set<Activity> activities;
 
 
-    public void setCandidat(Candidat candidat) {
-        log.warn("SET CANDIDAT ON CV ENTITY");
 
-        this.candidat = candidat;
-        if (candidat != null && !candidat.getCv().equals(this)) {
-            candidat.setCv(this);
-        }
-    }
 
 }

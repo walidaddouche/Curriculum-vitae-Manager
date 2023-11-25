@@ -25,4 +25,6 @@ public interface CandidatRepository extends PagingAndSortingRepository< Candidat
     List<Candidat> findByNomContainingAndPrenomContainingIgnoreCase(String Nom , String Prenom);
     List<Candidat> findByNomContainingIgnoreCase(String Nom);
 
+
+
 }

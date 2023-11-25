@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
 @Slf4j
 
 @Component
@@ -29,67 +31,35 @@ public class DatabaseLoader implements CommandLineRunner {
     DatabaseLoader(CandidatRepository candidatRepository,
                    CurriculumVitaeRepository curriculumVitaeRepository,
                    ActivityRepository activityRepository
-                    ){
+    ) {
         this.candidatRepository = candidatRepository;
         this.curriculumVitaeRepository = curriculumVitaeRepository;
         this.activityRepository = activityRepository;
     }
 
 
-    public void generateAndSaveCandidats(int numberOfCandidats) {
-        Faker faker = new Faker();
+    public void generateAndSaveCandidats() {
+        // Création d'un CurriculumVitae
+        CurriculumVitae cv = new CurriculumVitae();
+        cv.setActivities(new HashSet<>());  // Vous pouvez ajouter des activités ici si nécessaire
+        curriculumVitaeRepository.save(cv);
 
-        for (int i = 1; i <= numberOfCandidats; i++) {
-            String nom = faker.name().lastName();
-            String prenom = faker.name().firstName();
-            String email = faker.internet().emailAddress();
-            String webAddress = faker.internet().url();
+        // Création d'un Candidat avec le CurriculumVitae associé
+        Candidat candidat = new Candidat();
+        candidat.setNom("Nom du candidat");
+        candidat.setPrenom("Prénom du candidat");
+        candidat.setEmail("email@example.com");
+        candidat.setDateNaissance(new Date());
 
-            Date dateNaissance = faker.date().birthday();
+        candidat.setCv(cv);
 
-            Candidat candidat = Candidat.builder()
-                    .nom(nom)
-                    .prenom(prenom)
-                    .email(email)
-                    .dateNaissance(dateNaissance)
-                    .siteWeb(webAddress)
-                    .build();
+        candidatRepository.save(candidat);
 
 
-
-
-            candidatRepository.save(candidat);
-            // Enregistrement du candidat dans le repository Candidat
-
-            // Création du CV et des activités pour chaque candidat
-            CurriculumVitae cv = generateCurriculumVitae(faker);
-
-
-            candidat.setCv(cv);
-
-            curriculumVitaeRepository.save(cv);
-            candidatRepository.save(candidat);
-
-
-            // Enregistrement du CV dans le repository CvRepository
-
-            log.info("CANDIDAT du cv  " + cv.getCandidat());
-            log.info("cv du candidat  " + candidat.getCv());
-
-            Set<Activity> activities = cv.getActivities();
-            for (Activity activity : activities) {
-                activity.setCv(cv);
-                // Enregistrement de chaque activité dans le repository ActivityRepository
-                activityRepository.save(activity);
-            }
-        }
-
-}
+    }
 
     public CurriculumVitae generateCurriculumVitae(Faker faker) {
-        return CurriculumVitae.builder()
-                .activities(generateActivities(faker))
-                .build();
+        return null;
     }
 
     public Set<Activity> generateActivities(Faker faker) {
@@ -110,13 +80,14 @@ public class DatabaseLoader implements CommandLineRunner {
 
         return activities;
     }
-    @Override
-    public void run(String... args)  {
 
-        int numberOfCandidats = 100;
+    @Override
+    public void run(String... args) {
+        this.generateAndSaveCandidats();
+
+
 
         // Remplacez les paramètres par les instances appropriées de vos repositories
-        this.generateAndSaveCandidats(numberOfCandidats);
     }
-    }
+}
 

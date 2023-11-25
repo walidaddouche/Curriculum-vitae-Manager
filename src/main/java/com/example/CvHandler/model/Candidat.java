@@ -30,8 +30,10 @@ public class Candidat {
     private String siteWeb;
     private Date dateNaissance;
     private String motDePasse;
-    @OneToOne(mappedBy = "candidat", cascade = CascadeType.ALL)
+    @OneToOne
     private CurriculumVitae cv;
+
+
 
 
     public void updateAttributes(Candidat updatedCandidat) {

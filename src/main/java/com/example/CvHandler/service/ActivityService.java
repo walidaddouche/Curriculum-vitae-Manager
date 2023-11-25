@@ -17,19 +17,19 @@ public class ActivityService {
         this.activityRepository = activityRepository;
     }
 
-    public Activity saveActivity(Activity activite) {
-        return activityRepository.save(activite);
+    public Activity saveActivity(Activity activity) {
+        return activityRepository.save(activity);
     }
 
-    public Optional<Activity> getActiviteById(Long id) {
+    public Optional<Activity> getActivityById(Long id) {
         return activityRepository.findById(id);
     }
 
-    public Iterable<Activity> getAllActivites() {
+    public Iterable<Activity> getAllActivities() {
         return activityRepository.findAll();
     }
 
-    public void deleteActivite(Long id) {
+    public void deleteActivity(Long id) {
         activityRepository.deleteById(id);
     }
 }

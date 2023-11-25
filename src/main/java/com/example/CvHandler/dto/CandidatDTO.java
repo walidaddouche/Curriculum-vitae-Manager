@@ -1,5 +1,6 @@
 package com.example.CvHandler.dto;
 
+import com.example.CvHandler.model.CurriculumVitae;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,5 @@ public class CandidatDTO {
     private String email;
     private String siteWeb;
     private Date dateNaissance;
-
+    CurriculumVitae cv;
 }

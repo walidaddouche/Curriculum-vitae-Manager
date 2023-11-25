@@ -8,12 +8,12 @@ import com.example.CvHandler.repository.CurriculumVitaeRepository;
 import java.util.Optional;
 
 @Service
-public class CVService {
+public class CurriculumVitaeService {
 
     private final CurriculumVitaeRepository curriculumVitaeRepository;
 
     @Autowired
-    public CVService(CurriculumVitaeRepository curriculumVitaeRepository) {
+    public CurriculumVitaeService(CurriculumVitaeRepository curriculumVitaeRepository) {
         this.curriculumVitaeRepository = curriculumVitaeRepository;
     }
 

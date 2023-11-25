@@ -3,6 +3,7 @@ package com.example.CvHandler.controller;
 import com.example.CvHandler.controller.Exception.NotFoundException;
 import com.example.CvHandler.dto.CandidatDTO;
 import com.example.CvHandler.model.Candidat;
+import com.example.CvHandler.model.CurriculumVitae;
 import com.example.CvHandler.service.CandidatService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,22 @@ public class CandidatController {
             @RequestParam(name = "prenom") String prenom) {
         List<Candidat> candidats = candidatService.searchByNomAndPrenom(nom, prenom);
         return ResponseEntity.ok(candidats);
+    }
+
+
+    @GetMapping("/{id}/cv")
+    public ResponseEntity<CurriculumVitae> getCV(@PathVariable Long id) {
+        Optional<Candidat> candidat = candidatService.getCandidatById(id);
+        if (candidat.isPresent()) {
+            CurriculumVitae cv = candidat.get().getCv();
+            if (cv != null) {
+                return new ResponseEntity<>(cv, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
