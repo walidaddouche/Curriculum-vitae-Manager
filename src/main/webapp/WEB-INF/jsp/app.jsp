@@ -10,6 +10,8 @@
             <a class="navbar-brand" href="/#/search/">Search </a>
 
             <a class="navbar-brand" href="/#">candidats </a>
+            <a class="navbar-brand" href="#/create/person">Create Person </a>
+
 
         </nav>
 

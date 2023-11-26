@@ -29,10 +29,9 @@ public class Candidat {
     private String email;
     private String siteWeb;
     private Date dateNaissance;
-    private String motDePasse;
+    private String password;
     @OneToOne
     private CurriculumVitae cv;
-
 
 
 

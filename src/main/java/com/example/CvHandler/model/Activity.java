@@ -1,6 +1,8 @@
 package com.example.CvHandler.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,14 +27,12 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer activityYear;
-    private String nature;
+    @Enumerated()
+    private ACTIVITY_TYPE activityType;
     private String title;
     private String description;
     private String adresseWeb;
-    @ManyToOne
-    @JoinColumn(name = "cv_id")
+    @ManyToOne(cascade = CascadeType.ALL)
     private CurriculumVitae cv;
-
-
 }
 

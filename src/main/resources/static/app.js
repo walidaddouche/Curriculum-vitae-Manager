@@ -2,12 +2,16 @@ import CandidatDetail from './candidatDetail.js';
 import NotFound from './notFound.js';
 import Candidats from "./candidats.js";
 import Search from "./search.js";
-import search from "./search.js";
+import Cv from "./cv.js"
+import CreatePerson from "./createPerson.js"
 
 const routes = {
     '/': Candidats,
     '/candidatDetail/:id': CandidatDetail,
-    '/search' :  Search
+    '/search' :  Search,
+    '/cv/:id' : Cv,
+    '/create/person' : CreatePerson
+
 
 };
 
@@ -29,6 +33,12 @@ const app = Vue.createApp({
             }
             if (this.currentPath.startsWith('#/search/')) {
                 return Search;
+            }
+            if (this.currentPath.startsWith('#/cv/')) {
+                return Cv;
+            }
+            if(this.currentPath.startsWith("#/create/person")){
+                return CreatePerson;
             }
             return routes[this.currentPath.slice(2) || '/'] || NotFound;
         },

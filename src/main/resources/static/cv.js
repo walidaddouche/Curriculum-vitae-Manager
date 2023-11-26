@@ -1,15 +1,13 @@
 export default {
     data() {
         return {
-            candidate: null,
+            cv: null,
             nom: null,
             prenom: null,
-            email: null,
-            siteweb: null,
-            dateDeNaissance: null,
             axios: null,
             candidateId: null,
             error: null,
+            activities: []
         };
     },
 
@@ -17,11 +15,13 @@ export default {
         onRouteChange() {
             // Le reste du code pour extraire l'ID et appeler l'API reste inchangé
             const hash = window.location.hash;
-            const regex = /#\/candidatDetail\/(\d+)/;
+            const regex = /\/cv\/(\d+)/;
             const match = hash.match(regex);
             const candidatId = match ? match[1] : null;
 
-            if (!candidatId || isNaN(candidatId)) {
+            console.log("Candidat id " + candidatId)
+
+            if (!candidatId || isNaN(parseInt(candidatId))) {
                 this.error = 'L\'ID du candidat est invalide';
                 return;
             }
@@ -34,16 +34,14 @@ export default {
             this.candidateId = candidatId;
             this.error = null;
 
-            this.axios.get(`/candidat/${this.candidateId}`)
+            this.axios.get(`/cvs/${this.candidateId}`)
                 .then(response => {
-                    this.candidate = response.data;
-                    this.nom = this.candidate.nom;
-                    this.prenom = this.candidate.prenom;
-                    this.email = this.candidate.email;
-                    this.siteweb = this.candidate.siteweb;
-                    this.dateDeNaissance = this.candidate.dateDeNaissance;
+                    console.log("request ")
+                    this.activities = response.data.activities
+
                 })
                 .catch(error => {
+                    console.log("error")
                     this.error = 'Une erreur s\'est produite lors de la récupération des données du candidat';
                 });
         },
@@ -59,7 +57,7 @@ export default {
         this.axios = axios.create({
             baseURL: 'http://localhost:8080/',
             timeout: 1000,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
         });
 
         // Appel initial pour s'assurer que les données sont chargées au premier rendu
@@ -74,27 +72,31 @@ export default {
         window.removeEventListener('hashchange', this.onWindowHashChange);
     },
 
-    template: `
-      <div>
-        <h1 class="mb-4">CandidatDetail</h1>
-        <template v-if="candidate">
-          <ul class="list-group">
-            <li class="list-group-item"><strong>Nom :</strong> {{ nom }}</li>
-            <li class="list-group-item"><strong>Prénom :</strong> {{ prenom }}</li>
-            <li class="list-group-item"><strong>Email :</strong> {{ email }}</li>
-            <li class="list-group-item"><strong>Siteweb :</strong> {{ siteweb }}</li>
-            <li class="list-group-item"><strong>Date de Naissance :</strong> {{ dateDeNaissance }}</li>
-            <li class="list-group-item"><strong > <a :href="'#/cv/' + candidateId"> Voir details </a>  </strong> </li>
 
-          </ul>
-        </template>
-
-        <template v-else>
-          <div class="alert alert-danger mt-4" role="alert">
-            <p v-if="error">L'identifiant du candidat est invalide</p>
-            <p v-else>Une erreur s'est produite lors de la récupération des données du candidat</p>
+    template:
+        `
+          <div class="container">
+            <h1 class="mb-4">CurriculumVitae Details</h1>
+            <template v-if="activities">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <strong>Activités :</strong>
+                  <ul class="list-group">
+                    <li v-for="activity in activities" :key="activity.id" class="list-group-item">
+                      <strong>Type d'activité:</strong> {{ activity.activityType }}<br>
+                      <strong>Année:</strong> {{ activity.activityYear }}<br>
+                      <strong>Titre:</strong> {{ activity.title }}<br>
+                      <strong>Adresse Web:</strong> {{ activity.adresseWeb }}<br>
+                      <strong>Description:</strong> {{ activity.description }}<br>
+                      <!-- Ajoutez d'autres champs au besoin -->
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </template>
           </div>
-        </template>
-      </div>
-    `,
-};
+
+
+
+        `
+}

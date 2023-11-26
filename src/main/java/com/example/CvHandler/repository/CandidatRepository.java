@@ -4,26 +4,28 @@ import com.example.CvHandler.model.Candidat;
 import com.example.CvHandler.summary.CandidatProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CandidatRepository extends PagingAndSortingRepository< Candidat,Long> , CrudRepository<Candidat,Long> {
     @Query("SELECT c.id as id, c.nom as nom, c.prenom as prenom, c.email as email FROM Candidat c")
     Page<CandidatProjection> getAllCandidatWithoutDetails(Pageable pageable);
 
-    @Query("SELECT c FROM Candidat c WHERE " +
-            "LOWER(c.nom) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-            "LOWER(c.prenom) LIKE LOWER(CONCAT('%', :search, '%'))")
-    Page<Candidat> searchCandidats(String search, Pageable pageable);
+    Page<CandidatProjection> findByPrenomContainingIgnoreCase(Pageable pageable,String Prenom);
+    Page<CandidatProjection> findByNomContainingAndPrenomContainingIgnoreCase(Pageable pageable,String Nom , String Prenom);
+    Page<CandidatProjection> findByNomContainingIgnoreCase(Pageable pageable,String Nom);
+    Optional<Candidat> findByEmail(String email);
 
-    List<Candidat> findByPrenomContainingIgnoreCase(String Prenom);
-    List<Candidat> findByNomContainingAndPrenomContainingIgnoreCase(String Nom , String Prenom);
-    List<Candidat> findByNomContainingIgnoreCase(String Nom);
+    Optional<Candidat> deleteByEmail(String email);
+
 
 
 

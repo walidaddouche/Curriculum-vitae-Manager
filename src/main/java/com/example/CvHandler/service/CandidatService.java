@@ -3,6 +3,7 @@ package com.example.CvHandler.service;
 
 import com.example.CvHandler.summary.CandidatProjection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.CvHandler.model.Candidat;
@@ -67,19 +68,25 @@ public class CandidatService {
     }
 
 
-    public List<Candidat> searchByNom(String nom) {
-        // Implémentez la logique de recherche par nom
-        return candidatRepository.findByNomContainingIgnoreCase(nom);
+    public Page<CandidatProjection> searchByNom(Pageable pageable, String nom) {
+        return candidatRepository.findByNomContainingIgnoreCase(pageable,nom);
     }
 
-    public List<Candidat> searchByPrenom(String prenom) {
-        // Implémentez la logique de recherche par prénom
-        return candidatRepository.findByPrenomContainingIgnoreCase(prenom);
+    public Page<CandidatProjection> searchByPrenom(Pageable pageable, String prenom) {
+        return candidatRepository.findByPrenomContainingIgnoreCase(pageable,prenom);
     }
 
-    public List<Candidat> searchByNomAndPrenom(String nom, String prenom) {
-        // Implémentez la logique de recherche par nom et prénom
-        return candidatRepository.findByNomContainingAndPrenomContainingIgnoreCase(nom, prenom);
+    public Page<CandidatProjection> searchByNomAndPrenom(Pageable pageable, String nom, String prenom) {
+        return candidatRepository.findByNomContainingAndPrenomContainingIgnoreCase(pageable,nom, prenom);
+    }
+
+    public Candidat createCandidat(Candidat candidat) {
+        return candidatRepository.save(candidat);
+    }
+
+    public boolean isEmailUnique(String email) {
+        Optional<Candidat> existingCandidat = candidatRepository.findByEmail(email);
+        return existingCandidat.isEmpty();
     }
 
 

@@ -5,8 +5,10 @@ import com.example.CvHandler.dto.CandidatDTO;
 import com.example.CvHandler.model.Candidat;
 import com.example.CvHandler.model.CurriculumVitae;
 import com.example.CvHandler.service.CandidatService;
+import com.example.CvHandler.summary.CandidatProjection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,15 +36,16 @@ public class CandidatController {
 
 
     @Autowired
-    CandidatController(CandidatService candidatService,ModelMapper modelMapper) {
+    CandidatController(CandidatService candidatService, ModelMapper modelMapper) {
         this.candidatService = candidatService;
         this.modelMapper = modelMapper;
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCandidatById(@PathVariable Long id) {
         Optional<Candidat> candidatOptional = candidatService.getCandidatById(id);
         if (candidatOptional.isEmpty()) {
-            throw new NotFoundException("Candidat Introuvable ",HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Candidat Introuvable ", HttpStatus.NOT_FOUND);
         }
 
         return ResponseEntity.ok(modelMapper.map(candidatOptional.get(), CandidatDTO.class));
@@ -53,7 +57,7 @@ public class CandidatController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(name = "withDetails", defaultValue = "false") boolean withDetails) {
         Pageable pageable = PageRequest.of(page, size);
-        Object response =  null;
+        Object response = null;
 
         if (withDetails) {
             Iterable<Candidat> candidats = candidatService.getAllCandidats(pageable);
@@ -99,20 +103,26 @@ public class CandidatController {
 
 
     @GetMapping("/search/nom")
-    public ResponseEntity<?> searchByNom(@RequestParam(name = "query") String query) {
+    public ResponseEntity<?> searchByNom(@RequestParam(name = "query") String query,
+                                         @RequestParam(defaultValue = "0") Integer page,
+                                         @RequestParam(defaultValue = "10") Integer size) {
         if (query.length() < 3) {
             return ResponseEntity.badRequest().body("Le terme de recherche doit avoir au moins trois lettres.");
         }
-        List<Candidat> candidats = candidatService.searchByNom(query);
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<?> candidats = candidatService.searchByNom(pageable,query);
         return ResponseEntity.ok(candidats);
     }
 
     @GetMapping("/search/prenom")
-    public ResponseEntity<?> searchByPrenom(@RequestParam(name = "query") String query) {
+    public ResponseEntity<?> searchByPrenom(@RequestParam(name = "query") String query, @RequestParam(defaultValue = "0") Integer page,
+                                            @RequestParam(defaultValue = "10") Integer size) {
         if (query.length() < 3) {
             return ResponseEntity.badRequest().body("Le terme de recherche doit avoir au moins trois lettres.");
         }
-        List<Candidat> candidats = candidatService.searchByPrenom(query);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<?> candidats = candidatService.searchByPrenom(pageable,query);
         return ResponseEntity.ok(candidats);
     }
 
@@ -120,8 +130,12 @@ public class CandidatController {
     @GetMapping("/search/both")
     public ResponseEntity<?> searchByNomAndPrenom(
             @RequestParam(name = "nom") String nom,
-            @RequestParam(name = "prenom") String prenom) {
-        List<Candidat> candidats = candidatService.searchByNomAndPrenom(nom, prenom);
+            @RequestParam(name = "prenom") String prenom,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<?> candidats = candidatService.searchByNomAndPrenom(pageable,nom, prenom);
         return ResponseEntity.ok(candidats);
     }
 
@@ -141,12 +155,23 @@ public class CandidatController {
         }
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<?> createPerson(@RequestBody Candidat candidat) {
+            try {
+                if (!candidatService.isEmailUnique(candidat.getEmail())) {
+                    return new ResponseEntity<>("Email already exists", HttpStatus.CONFLICT);
+                }
+                else {
+                    candidatService.saveCandidat(candidat);
+                }
+                return new ResponseEntity<>("Candidat créé avec succès", HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Erreur lors de la création du candidat", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
 
 
-
-
-
-}
+    }
 
 
 

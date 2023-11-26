@@ -32,10 +32,7 @@ public class CurriculumVitae {
     private Candidat candidat;
 
 
-    @OneToMany(mappedBy = "cv", cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Activity> activities;
-
-
-
 
 }
